@@ -382,14 +382,29 @@ xxSM	set stop marker
 ?F		get frame number
 ```
 
-```
-FR3500SE
-3000SM
-180SPMR
+-----------
+Examples:
 
+```
+FR3500SE		Seek to frame 3500
+3000SM			Set stop marker at 3000
+180SPMR			Play at 3x speed, backwards, stopping at 3000
+```
+
+```
 255RB			disable squelches
 3AD				analog audio
 FR1111SE		seek to frame 1111		
 FR575SM			set stop point at frame 575
 180SPMR			play at 3x speed, backwards
+```
+
+``
+CS				clear screen
+1DS				enable OSD
+1KL				lock out keys
+4RA				enable only user OSD text
+#I				get last press (store aside as K$)
+4PR				Print the next thing on line 4 of OSD
+(K$)			prints the last keycode on line 4
 ```
