@@ -166,9 +166,14 @@ LO		use for number for seeking to Lead-Out
 
 # Status/Query commands
 ```
+sent	resp.
+
 ?F		2231	get current frame number
+
 ?C		3		get current chapter number
+
 ?T		03213	get current time (0h 32m 13s)
+			CAV returns E04
 
 ?P				get current player mode
 		P00		DOOR OPEN		- tray is out
@@ -189,7 +194,11 @@ LO		use for number for seeking to Lead-Out
 		C4: 0:side 1, 1:side 2
 		C5: 0:no chapters, 1:has chapters
 
+		Mind's Eye CAV disc:	10001
+
 ?X		P1518XX  - V2400
+
+		Mine returns:			P151801
 ```
 
 ---
@@ -279,12 +288,59 @@ $C		xxxxxxxx	current value of C register
 				FF = no key, 07 for [7]
 		- works for all buttons
 
+
 ?N		(wait until user hits button)
 		7		(user pressed '7')
-		- only works for number pad
+		- only works for numbers!
 
 CL				clear/break the ?N "waiting" to regain control
+		- does not clear "last pressed" for #I
+
 ```
+
+Remote Key Codes: (CU-LD007)
+	FF		No press since last query
+	00		0
+	..		(numbers map to the expected values)
+	09		9
+
+	0C		Auto Digital/Analog			"D/A CX" on CU-CLD067
+	0E		CX
+	0F		TV/LVP
+
+	10		Scan >>
+	11		Scan <<
+	13		Chapter / Frame Time
+	16		Eject []/^
+	17		Play
+	18		Pause
+	1E		Analog Audio Monitor		"Audio" on CU-CLD067
+
+	40		Program
+	42		Search / Memory
+	43		Display
+	44		Repeat - B, Chapter / One Side
+	45		Clear
+	46		Multi Speed -
+	47		Multi Speed +
+	48		Repeat - A
+
+	50		Still / Step <||
+	52		Chapter Skip >>|
+	53		Chapter Skip |<<
+	54		Still / Step ||>
+	55		Multi Speed <
+	58		Multi Speed >
+
+Additional buttons on CU-CLD067
+	1C		Power
+	37		D-Level Ctrl
+	5A		Hilite/Intro
+
+If bar code reader is plugged in (UC-V109BC tested) then IR 
+remote receiver on unit is nonfunctional.  Buttons on BCR send
+the same codes as the above. (17, 18, 10, 11, 50, 52, 53, 54)
+
 
 ---
 
@@ -299,6 +355,8 @@ xPR		print next line to osd line x
 CS 		clear screen
 
 1KL		lock keys
+		- front panel and remote do not control playback
+		- the following two commands do still work
 ?N		wait for key press
 #I		immediate get current key pressed
 CL		clear input/regain
