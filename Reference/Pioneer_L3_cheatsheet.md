@@ -95,6 +95,20 @@ Some of these (SF/SR/MF/MR) do not work with CLV
 	Note: Current state can be found via "?P" query command.
 	      It returns "Pxx" as listed above. See command info
 	      below.
+---
+
+#Real use:
+
+```
+- Tray open		P00
+- Tray closing	P01
+- Tray opening	P03
+- Press play with tray open - P01, then once it starts spinning, P02, then P04 when playing
+- press stop 	P01 immediately
+- tray empty, in machine, press play,  E11
+
+
+```
 
 ---
 
@@ -299,7 +313,8 @@ CL		clear input/regain
 0RB 	normal squelch
 192RB	disable all sqelches
 
-4AD		digital audio off
+0AD		audio off
+3AD		analog audio track
 7AD		digital audio on
 
 4SP		1/4 speed
@@ -307,4 +322,16 @@ MR		multi-reverse
 xxSM	set stop marker
 
 ?F		get frame number
+```
+
+```
+FR3500SE
+3000SM
+180SPMR
+
+255RB			disable squelches
+3AD				analog audio
+FR1111SE		seek to frame 1111		
+FR575SM			set stop point at frame 575
+180SPMR			play at 3x speed, backwards
 ```

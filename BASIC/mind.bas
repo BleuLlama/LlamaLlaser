@@ -1,7 +1,7 @@
 10 REM Minds Eye interactive game thing
 11 REM This is a demo of the BASIC interface game
 15 REM by Scott Lawrence - yorgle@gmail.com
-16 VERS = "0.01 2018-Nov-04"
+16 VERS = "0.01 2018-Nov-05"
 
 20 DEBUG = 1 : REM enable debug output
 21 TMOUT = 1000 : REM ticks to wait for a response
@@ -17,8 +17,8 @@
 101 REM Hopefully, this is all that will need to chage for portinf
 
 110 REM Initialize serial port
-111 OPEN "COM:78N1DIN" FOR OUTPUT AS #1
-112 OPEN "COM:78N1DIN" FOR INPUT AS #2
+111 OPEN "COM:78N1DII" FOR OUTPUT AS #1
+112 OPEN "COM:78N1DII" FOR INPUT AS #2
 113 ON COM GOSUB 120
 114 COM ON
 119 RETURN
@@ -70,9 +70,20 @@
 184 TX$="0DS":GOTO 130 : REM disable OSD 
 185 TX$="1DS":GOTO 130 : REM disable OSD 
 
-200 REM DATA Format:
 
-200 DATA 200,
+200 DATA "A grassy field","A wide clearing stretching","in every direction",-1,201,202,-1
+201 DATA "N","2","Go North","A wide path to the north","G",210
+202 DATA "S","8","Go South","A house is to the south","G",220
+
+210 DATA "Dirt path", "A dusty path",-1,211
+211 DATA "S","8","Go South","Go to the grassy field","G",200
+
+220 DATA "Country House porch", "A quaint cottage in", "the countryside",-1,221,222,-1
+221 DATA "N","2","Go North", "Go to the grassy field","G",200
+222 DATA "G","1","Get Screwdriver","An ordinary screwdriver","P",300
+
+300 DATA "A Screwdriver","An ordinary screwdriver",100
+
 
 900 REM Setup new room 
 910 RETURN
