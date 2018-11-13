@@ -1,0 +1,296 @@
+This doc is just a scratchpad for figuring out how to implement
+this program in BASIC...
+
+
+~~~~~~
+
+
+BASIC serial interface allocation
+- making it like a standard replacable BIOS system so it can be easily 
+  ported to other BASICs in the future.
+
+1..99  user area
+
+100		Serial bios (reserved 100-199)
+110		Initialize Serial connection
+120		Transmit T$ to serial port
+130		Read in to R$ to serial port
+140		Transmit T$, wait and read in to R$
+
+200		Laserdisc bios (reserved 200-299) see below
+210		
+
+This is overcomplicated.
+What functions do we really care about?
+------------------------
+Seek to frame X and stillframe
+Black Screen
+Blue Screen
+LD Video On
+Audio Mute
+Audio Enable
+Slow-motion Forwards
+Slow-Motion backwards
+
+Enable User Text
+Disable User Text
+Clear User Text
+
+Wait for and get user input, or cancel out after timeout
+
+
+-----------
+Move interface:
+
+		1	2	3
+		G	N	P			G 	= Get
+							P 	= Put
+
+		4	5	6
+		W	?	E			?	= room info
+
+		7	8	9
+		-	S	-
+
+			0
+			U
+		u= user menu
+
+Get / Put interface:
+	Get:
+		display list of items in the room
+
+	1-9 - item in room or inventory slot
+
+Use modes:
+	Move - inputs move around the labyrinth (above)
+
+Item:
+	Name, Slot
+
+Inventory:
+	Slot, Name
+
+Scene:
+	exits - N S E W U D 
+		- named, with compare character/number
+		- disabled if don't have an item
+	items - Get item with compare character/number
+
+User:
+	Inventory
+	Move
+	Get
+	Put
+	Restart
+
+----------
+----------
+
+Menu:
+	Move
+		1..9 - movement directions
+	Do
+		1..9 - things to do
+	Room
+		Look At
+			1..9 items
+		Get
+			1..9 items
+
+	Inventory
+		(shows list)
+		Look
+		Use
+		Drop
+
+Main Menu
+	1. Move
+	2. Do
+	3. Items
+
+Move Menu
+	1..9 Movement directions 
+	0 Cancel
+
+Do Menu
+	1..9 Room actions 
+	0 Cancel
+
+Items Menu
+  blagh
+
+--------
+simplified:
+
+	room has a list of 9 specific things to do:
+		- move to X room (2,4,6,8 for cardinal directions)
+		- do X thing
+		- Get X thing
+		- Put X thing
+		- 0 - Menu
+
+	Menu:
+		0 - exit
+		1 (5?) - Inventory
+			shows items, then shows Inventory menu:
+		9 - restart
+			1 - yes, anything else; exit
+
+
+
+	Inventory menu:
+		0 - exit
+
+-------
+
+Overall strucutre:
+  1- 19 comments, info
+ 20- 29 variable setup
+ 30- 99 system initialization
+100-149 Serial interface and setup
+150-199 Serial setup and laserdisc commands
+200-999 Game data
+1000-?  Game engine
+
+
+----- Data format
+
+each data item is described on a new DATA line
+the line number is used as the id of the item.  ie room '200' is on line '200'.  
+this allows for the room, item, etc information to be stored mixed together easily.
+
+Room/Scene:
+	<line> DATA "Short Name","Description Line 1","line 2",...,-1,<action id>,...,-1
+
+Action:
+	<line> DATA <menuchar1>,<npadchar1>,"short name", "description", <action type>, <args>
+
+Item:
+	<line> DATA "short name","description",<encumberance>
+
+Examples:
+
+	200 DATA "A grassy field","A wide clearing stretching","in every direction",  -1,201,202,-1
+	201 DATA "N","2","Go North","A wide path to the north","G",210
+	202 DATA "S","8","Go South","A house is to the south","G",220
+
+
+
+	210 DATA "Dirt path", "A dusty path",-1,211
+	211 DATA "S","8","Go South","Go to the grassy field","G",200
+
+	220 DATA "Country House porch", "A quaint cottage in", "the countryside",-1,221,222,-1
+	221 DATA "N","2","Go North", "Go to the grassy field","G",200
+	222 DATA "G","1","Get Screwdriver","An ordinary screwdriver","P",300
+
+	300 DATA "A Screwdriver","An ordinary screwdriver",100
+
+Action Types:
+	G		move to scene [+1]
+	GIC		Movie to scene [+1] only if inventory contains [+2]
+	P		Pick up item [+1]
+	PIC		Pick up item [+1] only if inventory contains [+2]
+
+------
+
+SCENE:
+	title							"fishtank"
+	description						"This fishtank is spacious there"
+	video sequence					"FR2000SE/FR2010PL"
+	autoaction
+	list of actions, end with -1
+
+Action:
+	keypress
+	title
+	description
+
+Item:
+	name
+	description
+	video sequende
+	weight
+
+
+----------------------------------------------------------------------------
+
+Thing we need:
+- play video scene
+- auto action
+- show room title
+- menu of actions
+	- look
+	- inventory
+	- get
+	- move
+205 shows a video scene
+	- protocol uses two character letters
+	- first character can also be ? for queries, # for requests from user, or digit for parameters
+	- basically, 
+		- if reading digits, accumulate them into integer number parameter
+		- if read then read 2 characters, do the thing using the last numebr read in
+		$A Register query
+		?F get frame number
+		#I read immediate value
+
+items are:
+	"FR",
+	"!F23000"
+
+	my items:
+		!F<number>		wait until this number is reached (or timeout happens)
+		!W<time>		wait this many time units regardless of input
+		!S<n>			send preset sequence
+						!S0 - Prep player on frame 0, analog audio, video enabled, no OSD
+						!S1 - Blue forced squelch, disable LD video, mute audio, Clear screen, User OSD 
+						!S2 - Black forced squelch, disable LD video, mute audio, Clear screen, User OSD
+						!S3 - Normal squelches, video enabled, audio enabled, no OSD
+						!S4 - Normal squelches, video enabled, audio enabled, OSD not touched
+						!S5 - Normal squelches, video enabled, audio muted, no OSD
+						!S6 - Normal squelches, video enabled, audio muted, OSD not touched
+
+
+200 DATA "A grassy field",205,"A wide clearing stretching","in every direction",-1,201,202,-1
+201 DATA "N","Go North","A wide path to the north","G",210
+202 DATA "S","Go South","A house is to the south","G",220
+205 DATA "FR2000SE",
+
+210 DATA "Dirt path", "A dusty path",-1,211
+211 DATA "S","Go South","Go to the grassy field","G",200
+
+220 DATA "Country House porch", "A quaint cottage in", "the countryside",-1,221,222,-1
+221 DATA "N","Go North", "Go to the grassy field","G",200
+222 DATA "G","Get Screwdriver","An ordinary screwdriver","P",300
+
+300 DATA "A Screwdriver","An ordinary screwdriver",100150 REM Laserdisc Commands  PLay, STill, SEek, FRame mode, 
+
+151 TX$="PL":GOTO 130 : REM Play
+152 TX$="PA":GOTO 130 : REM Pause
+153 TX$="ST":GOTO 130 : REM Stop
+154 TX$="SE":GOTO 130 : REM Seek
+155 TX$="FR":GOTO 130 : REM Frame mode
+156 TX$="RJ":GOTO 130 : REM Reject, Park
+157 TX$="OP":GOTO 130 : REM Open tray
+158 TX$="CO":GOTO 130 : REM Close tray
+159 TX$="SA":GOTO 130 : REM Start spinup
+
+160 TX$="0RA":GOTO 130 : REM turn off OSD overlay
+161 TX$="1RA":GOTO 130 : REM turn on OSD - FRAME
+162 TX$="4RA":GOTO 130 : REM turn on OSD - User text
+163 TX$="5RA":GOTO 130 : REM turn on OSD - User text + frame number
+164 TX$="CS":GOTO 130 : REM Clear OSD Screen
+
+170 TX$="0KL":GOTO 130 : REM unlock keys
+171 TX$="1KL":GOTO 130 : REM lock keys
+172 TX$="?N":GOTO 130 : REM wait for key press
+173 TX$="#I":GOTO 130 : REM get current key code
+174 TX$="CL":GOTO 130 : REM clear key lookup
+
+180 TX$="0RC":GOTO 130 : REM Blue squelch screen
+181 TX$="16RC":GOTO 130 : REM Black squelch screen
+182 TX$="0VD":GOTO 130 : REM disable video from disc
+183 TX$="1VD":GOTO 130 : REM enable video from disc
+184 TX$="0DS":GOTO 130 : REM disable OSD 
+185 TX$="1DS":GOTO 130 : REM disable OSD 
+

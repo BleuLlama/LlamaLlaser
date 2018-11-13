@@ -1,187 +1,75 @@
-This doc is just a scratchpad for figuring out how to implement
-this program in BASIC...
+BASIC engine layout
 
-BASIC serial interface allocation
-- making it like a standard replacable BIOS system so it can be easily 
-  ported to other BASICs in the future.
+1		comments and settings
+50		Game startup calls
 
-1..99  user area
-
-100		Serial bios (reserved 100-199)
-110		Initialize Serial connection
-120		Transmit T$ to serial port
-130		Read in to R$ to serial port
-140		Transmit T$, wait and read in to R$
-
-200		Laserdisc bios (reserved 200-299) see below
-210		
-
-This is overcomplicated.
-What functions do we really care about?
-------------------------
-Seek to frame X and stillframe
-Black Screen
-Blue Screen
-LD Video On
-Audio Mute
-Audio Enable
-Slow-motion Forwards
-Slow-Motion backwards
-
-Enable User Text
-Disable User Text
-Clear User Text
-
-Wait for and get user input, or cancel out after timeout
+100		- Serial COM BIOS
+110		Initialize Serial (#1, #2 files)
+120 	Read a line from serial port to RX$
+130 	Send TX$, wait for <CR> response to RX$
 
 
------------
-Move interface:
+200		Game engine
 
-		1	2	3
-		G	N	P			G 	= Get
-							P 	= Put
-
-		4	5	6
-		W	?	E			?	= room info
-
-		7	8	9
-		-	S	-
-
-			0
-			U
-		u= user menu
-
-Get / Put interface:
-	Get:
-		display list of items in the room
-
-	1-9 - item in room or inventory slot
-
-Use modes:
-	Move - inputs move around the labyrinth (above)
-
-Item:
-	Name, Slot
-
-Inventory:
-	Slot, Name
-
-Scene:
-	exits - N S E W U D 
-		- named, with compare character/number
-		- disabled if don't have an item
-	items - Get item with compare character/number
-
-User:
-	Inventory
-	Move
-	Get
-	Put
-	Restart
-
-----------
-----------
-
-Menu:
-	Move
-		1..9 - movement directions
-	Do
-		1..9 - things to do
-	Room
-		Look At
-			1..9 items
-		Get
-			1..9 items
-
-	Inventory
-		(shows list)
-		Look
-		Use
-		Drop
-
-Main Menu
-	1. Move
-	2. Do
-	3. Items
-
-Move Menu
-	1..9 Movement directions 
-	0 Cancel
-
-Do Menu
-	1..9 Room actions 
-	0 Cancel
-
-Items Menu
-  blagh
-
---------
-simplified:
-
-	room has a list of 9 specific things to do:
-		- move to X room (2,4,6,8 for cardinal directions)
-		- do X thing
-		- Get X thing
-		- Put X thing
-		- 0 - Menu
-
-	Menu:
-		0 - exit
-		1 (5?) - Inventory
-			shows items, then shows Inventory menu:
-		9 - restart
-			1 - yes, anything else; exit
+1000	- Game data base
+1010	- ON SC GOTO <list of id-per-scene RESTORE routines>
+1020 	- ON AC GOTO <list of id-per-action RESTORE routines>
+1030 	- (reserved for future on-gotos)
+1100	- beginning of user game data
 
 
+------
 
-	Inventory menu:
-		0 - exit
+Variables and files:
 
--------
+	General
+		DE(bug)	- enable extra debug output if set to 1
+		VE(r)$	- engine version info.
 
-Overall strucutre:
-  1- 19 comments, info
- 20- 29 variable setup
- 30- 99 system initialization
-100-149 Serial interface and setup
-150-199 Serial setup and laserdisc commands
-200-999 Game data
-1000-?  Game engine
+	Serial port
+		TX$		the line to send out the COM port
+		RX$		line received from COM
+		TM		Timeout for waiting for serial response
+		RK		Received response line ok (set by RX routine)
+		#1		Com port output file
+		#2		Com port input file
 
+	Game engine
+		SC		Current scene number
+		AC		Current action number
 
------ Data format
+------
 
-each data item is described on a new DATA line
-the line number is used as the id of the item.  ie room '200' is on line '200'.  
-this allows for the room, item, etc information to be stored mixed together easily.
+	in the engine...
+50 GOSUB 100	: REM initialize COM port
+60 GOTO 200		: REM startup game engine
+...
 
-Room/Scene:
-	<line> DATA "Short Name","Description Line 1","line 2",...,-1,<action id>,...,-1
+	example to send out comport and wait for a response
+2xx TX$ = "FR2933SE" : GOSUB 130	: TX 'seek', wait for response
+2xx TX$ = "FR2950PL" : GOSUB 130	: TX 'play until', wait for response
 
-Action:
-	<line> DATA <menuchar1>,<npadchar1>,"short name", "description", <action type>, <args>
+	Example scene data entry points (required at 1010, 1020)
+1010 ON SC GOTO 1100,1110,1120,1130,...
+1020 ON AC GOTO 1200,1210,1220,1230,...
 
-Item:
-	<line> DATA "short name","description",<encumberance>
+	example game data with entry point hooks
+1100 RESTORE 1101 : RETURN
+1101 DATA "scene 1 data is here",...
+1110 RESTORE 1110 : RETURN
+1111 DATA "scene 2 data is here",...
+...
 
-Examples:
+1200 RESTORE 1201 : RETURN
+1201 DATA "This is item 1"
+1210 RESTORE 1211 : RETURN
+1211 DATA "This is item 2"
+....
 
-	200 DATA "A grassy field","A wide clearing stretching","in every direction",-1,201,202,-1
-	201 DATA "N","2","Go North","A wide path to the north","G",210
-	202 DATA "S","8","Go South","A house is to the south","G",220
+----
 
-	210 DATA "Dirt path", "A dusty path",-1,211
-	211 DATA "S","8","Go South","Go to the grassy field","G",200
-
-	220 DATA "Country House porch", "A quaint cottage in", "the countryside",-1,221,222,-1
-	221 DATA "N","2","Go North", "Go to the grassy field","G",200
-	222 DATA "G","1","Get Screwdriver","An ordinary screwdriver","P",300
-
-	300 DATA "A Screwdriver","An ordinary screwdriver",100
-
-Action Types:
-	G		move to scene [+1]
-	GIC		Movie to scene [+1] only if inventory contains [+2]
-	P		Pick up item [+1]
-	PIC		Pick up item [+1] only if inventory contains [+2]
+For automated actions:
+	"~END"			end of action list
+	"~LD"			What follows are sequences to send to the LD device
+	"~AC"			What follows is an action ID to perform
+	"~SC"			What follows is a scene ID to go to.

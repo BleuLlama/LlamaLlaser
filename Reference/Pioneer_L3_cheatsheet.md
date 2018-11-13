@@ -333,6 +333,7 @@ Remote Key Codes: (CU-LD007)
 	58		Multi Speed >
 
 Additional buttons on CU-CLD067
+
 	1C		Power
 	37		D-Level Ctrl
 	5A		Hilite/Intro
