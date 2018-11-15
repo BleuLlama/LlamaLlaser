@@ -73,3 +73,5 @@ For automated actions:
 	"~LD"			What follows are sequences to send to the LD device
 	"~AC"			What follows is an action ID to perform
 	"~SC"			What follows is a scene ID to go to.
+
+--------------------------------------------------------------------------------
