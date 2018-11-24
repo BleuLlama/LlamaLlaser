@@ -1,100 +1,287 @@
-10 REM Minds Eye interactive game thing
-11 REM This is a demo of the BASIC interface game
-15 REM by Scott Lawrence - yorgle@gmail.co
-19 VER$ = "0.01 2018-Nov-05"
-
-20 DEBUG = 1 : REM enable debug output
-21 TM = 1000 : REM ticks to wait for a response
-22 RK = 0 : REM received a string (rxok)
-23 RX$ = "" : TX$ = ""
+10 REM Adventures Into The Mind's Eye
+15 REM by Scott Lawrence - yorgle@gmail.com
+19 VER$ = "0.15 2018-Nov-17"
+20 DEBUG = 0 : REM enable debug output
+21 TM = 100000 : REM ticks to wait for a response
+22 RK = 0 : REM received a string (rxok)23 RX$ = "" : TX$ = ""
 24 SC = 1 : REM starting scene#
+25 DISC = 1 : REM disc is present
 
 50 GOSUB 100 : REM Initialize serial
 60 GOTO 200 : REM Game engine start
 
-100 REM Serial BIOS thru line 140
-101 REM Hopefully, this is all that will need to chage for porting
+100 REM ---- Serial BIOS thru line 149
 
-110 REM Initialize serial port
+101 REM Hopefully, this is all that will need to chage for porting
+109 REM Initialize serial port
+110 CLOSE #1,#2
 111 OPEN "COM:78N1DII" FOR OUTPUT AS #1
 112 OPEN "COM:78N1DII" FOR INPUT AS #2
 113 ON COM GOSUB 120
 114 COM ON
 119 RETURN
+
 120 REM RX a line serial data to R$
 121 LINE INPUT #2, RX$ : REM TANDY -read until <CR>
 122 RK=1
-123 IF DEBUG THEN PRINT "RX: "; RX$ 
+123 IF DEBUG AND DISC THEN PRINT "RX: "; RX$ 
 129 RETURN
+
 130 REM TX a line and wait for response
-131 IF DEBUG THEN PRINT "TX: "; TX$
-132 RK=0
-133 PRINT #1, TX$
+131 IF DEBUG AND DISC THEN PRINT "TX: "; TX$
+132 RK=0 : IF DISC = 0 THEN RETURN
+133 PRINT #1,TX$
 134 I = 0
-135 IF RK GOTO 139
+135 IF RK THEN RETURN
 136 I = I + 1 
-137 IF I < TM GOTO 135
-139 RETURN
-
-200 PRINT "OK!"
-210 TX$="FR2000SE" : GOSUB 130
-
-999 PRINT "DONE!"
-
-
-
-1010 PRINT "Starting... "; SC
-1020 GOSUB 250
-1030 PRINT "Shell loop here."
-1040 END
-
-250 REM New Game
-260 RESTORE SC
-270 READ AA
-280 IF AA > 0 THEN GOTO 300 : REM >0 then the number is an AutoAction
-290 PRINT "uh... i dunno"
-299 RETURN
-
-300 REM Do Action
-310 RESTORE AA
-320 READ AI$
-330 IF AI$ = "~END" THEN RETURN
-340 IF AI$ = "~LD" THEN GOTO 400
-350 IF AI$ = "~SCE" THEN GOTO 500
-360 IF AI$ = "~ACT" THEN GOTO 600
-370 PRINT "ERR: U/K Act: "; AI$
-380 RETURN
-
-400 REM LD Playback Sequence
-410 READ AI$
-420 IF LEFT$( AI$, 1 ) = "~" THEN GOTO 330
-430 PRINT "PLAY SEQ "; AI$;
-440 TX$ = AI$ : GOSUB 130 : REM Send sequence, wait for response
-450 GOTO 410
-
-500 REM GO to new scene Wrapper
-510 READ AI$
-520 SCENE = VAL( AI$ )
-530 GOTO 250
-
-600 REM Do Action Wrapper
-610 READ AI$
-620 AA = VAL( AI$ )
-630 GOTO 310 : REM Do Action
+137 IF I < TM GOTO 135 : REM check for timeout
+138 PRINT "Timed out."
+139 TM=TM/2 : REM each timeout is shorter.
+140 IF TM > 50 THEN RETURN
+141 TM = 0 : DISC = 0
+142 PRINT "Bad disc COM. Disabling."
+143 RETURN
 
 
+200 REM ---- Main Game loop 
+210 GOSUB 1000:REM start in sc 1
+220 GOTO 500 : REM Main runloop
 
-1100 DATA 205, "A grassy field","A wide clearing stretching","in every direction"
-1101 DATA 202,203,-1
-1102 DATA "N","Go North","A wide path to the north","G",210
-1103 DATA "S","Go South","A house is to the south","G",220
-1105 DATA "~LD", "FR2000SE", "FR2020PL", "~END" : REM -2 starts autorun LD command sequence (play once)
-1106 DATA "~LD", "FR1234SE", "~SCE", 220 : REM -6 indicates "chain to this scene
-1107 DATA "~LD", "FR1234SE", "~ACT", 205 : REM -9 indicates "chain to this action
-1110 DATA -1, "Dirt path", "A dusty path",-1,211
-1111 DATA "S","Go South","Go to the grassy field","G",200
-1120 DATA -1 "Country House porch", "A quaint cottage in", "the countryside",-1,,221,222,-1
-1121 DATA "N","Go North", "Go to the grassy field","G",200
-1122 DATA "G","Get Screwdriver","An ordinary screwdriver","P",300
-1199 REM ITEMS
-1200 DATA "A Screwdriver","An ordinary screwdriver",100
+480 PRINT "Unknown Scene: ":SC
+490 PRINT "Stop."
+495 GOTO 495
+
+499 REM ---- Event Program Runner
+500 READ TX$
+
+501 IF TX$ = "!STOP" THEN RETURN
+
+505 IF NOT TX$ = "!WAIT" THEN GOTO 510
+506 READ W
+507 PRINT "Delay " ; W
+508 FOR A=0 TO (W*267) : NEXT A
+509 GOTO 500
+
+510 IF NOT TX$ = "!ANYKEY" THEN GOTO 515
+511 PRINT "Press any key.";
+512 IK$=INKEY$:IF IK$="" THEN 512
+513 GOTO 500
+
+515 IF NOT TX$ = "!PR" THEN 520
+516 READ PR$: PRINT ">> ";PR$
+517 IF PR$="!." THEN GOTO 500
+518 PRINT PR$
+519 GOTO 516
+
+520 IF NOT TX$ = "!FR" THEN GOTO 530
+521 READ FR$
+522 TX$="?F":GOSUB 130
+523 IF DISC = 0 THEN GOTO 500 : REM No connction
+524 IF RX$=FR$ THEN GOTO 500
+525 GOTO 522
+
+530 IF NOT TX$="!SC" THEN 535
+531 TX$="CS":GOSUB 130
+532 READ SC 
+533 IF DEBUG = 1 THEN PRINT "Scene -> ";SC
+534 GOSUB 1000 : GOTO 500
+
+535 IF NOT TX$="!KEY" THEN 560
+536 READ NK : REM Number of keys
+537 K1$="":K2$="":K3$="":K4$="" :IF NK < 1 THEN 545
+538 READ K1$:READ S1
+539 IF NK < 2 THEN 545
+540 READ K2$:READ S2
+541 IF NK < 3 THEN 545
+542 READ K3$:READ S3
+543 IF NK < 4 THEN 545
+544 READ K4$:READ S4
+545 IK$=INKEY$ : IF IK$="" THEN 545
+546 IF ASC(IK$)=30 THEN IK$="U"
+547 IF ASC(IK$)=31 THEN IK$="D"
+548 IF ASC(IK$)=29 THEN IK$="L"
+549 IF ASC(IK$)=28 THEN IK$="R"
+550 IF IK$=K1$ THEN SC = S1:GOTO 555
+551 IF IK$=K2$ THEN SC = S2:GOTO 555
+552 IF IK$=K3$ THEN SC = S3:GOTO 555
+553 IF IK$=K4$ THEN SC = S4:GOTO 555
+554 PRINT "?";:GOTO 545
+555 TX$="CS":GOSUB 130:GOSUB 1000 : GOTO 500:REM New Scene
+
+560 IF NOT TX$="!CHEAT" THEN 570
+562 PRINT "Scene No? ";
+563 INPUT SC
+564 GOSUB 1000 : GOTO 500
+
+570 IF NOT TX$="!XUD" THEN 580
+571 TX$="9pr":GOSUB 130
+572 TX$=" {  }  to move":GOSUB 130
+573 GOTO 500
+
+580 IF NOT TX$="!XUDLR" THEN 598
+581 TX$="9PR":GOSUB 130
+582 TX$=" {  }  [ ]   to move":GOSUB 130
+583 GOTO 500
+
+598 GOSUB 130 : REM Send to LD
+599 GOTO 500
+999 PRINT "DONE"
+
+
+1000 REM ---- scene handler
+1001 S=SC : PRINT "SCENE ";SC
+1002 ON S GOTO 1100,1200,1230,1250,1280
+1003 S=S-5
+1004 ON S GOTO 1300,1330,1360,1380,1410
+1005 S=S-5
+1006 ON S GOTO 1440,1470,1500,1600,1700
+1007 S=S-5
+1008 ON S GOTO 1800,1900,1620,1630,1650
+1009 S=S-5
+1010 ON S GOTO 1680
+
+1020 REM ----
+1025 GOTO 480 : REM Bad Scene number
+
+1098 REM ---- Program/Game data
+
+1100 RESTORE 1101:RETURN : REM Intro Sequence
+1101 DATA "CS","pa","0RC","0RB","5RA","1ds"
+1102 DATA "3AD" : REM analog audio, no squelch!
+1105 DATA "5PR","Starting up..."
+1106 DATA "7PR","    Please wait."
+1107 DATA "!PR", "Starting. Please wait.", "", "", "!."
+1110 DATA "pl","FR1570SE", "CS", "FR1600PL"
+1111 DATA "!PR", "Adventures Into", " The Mind's Eye"
+1112 DATA "A wandering by"," Scott Lawrence", " Interlock Rochester"
+1113 DATA " Rochester Maker Faire 2018","!."
+1115 DATA "1PR", "  Adventures Into"
+1120 REM          012345679012356789
+1125 DATA "6PR", "A wandering by"
+1130 DATA "7PR", "   Scott Lawrence"
+1135 DATA "8PR", " Interlock Rochester"
+1140 DATA "9PR", "Roch MakerFaire 2018"
+1145 DATA "!WAIT", 1, "FR1660PL"
+1150 DATA "6PR","", "7PR",""
+1155 DATA "8PR", "Press a key to start"
+1160 DATA "9PR",""
+1165 DATA "16RC", "!ANYKEY"
+1170 DATA "CS"
+1175 DATA "FR1700PL"
+1180 DATA "!SC",2
+
+1200 REM --2-- Castle zoom
+1202 RESTORE 1205:RETURN
+1205 DATA "FR35667se","240sp","FR35283SM","MR"
+1210 DATA "!FR","35283","!SC",3
+
+1230 REM --3--
+1232 RESTORE 1232:RETURN
+1245 DATA "!XUD", "!KEY",2, "U",4, "D",2
+
+1250 REM --4--
+1252 RESTORE 1255:RETURN
+1255 DATA "60SP","FR35251SM","MR"
+1260 DATA "!FR","35251","!SC",5
+
+1280 REM --5--
+1282 RESTORE 1285:RETURN
+1285 DATA "!XUDLR","!KEY",4, "U",7, "D",6, "L",13, "R",14
+
+1300 REM --6--
+1302 RESTORE 1305:RETURN
+1305 DATA "60SP", "FR35283SM","MF"
+1310 DATA "!FR","35283","!SC",3
+
+1330 REM --7--
+1332 RESTORE 1335:RETURN
+1335 DATA "60SP", "FR35176SM","MR"
+1340 DATA "!FR","35176","!SC",8
+
+1360 REM --8--
+1362 RESTORE 1365:RETURN
+1365 DATA "!XUDLR","!KEY",4, "U",10, "D",9, "L",15, "R",16
+
+1380 REM --9--
+1382 RESTORE 1385:RETURN
+1385 DATA "60SP","FR35251SM","MF"
+1390 DATA "!FR", "35251","!SC",5
+
+1410 REM --10--
+1412 RESTORE 1415:RETURN
+1415 DATA "60SP", "FR35077SM","MR"
+1420 DATA "!FR","35077", "!SC",11
+
+1440 REM --11--
+1442 RESTORE 1445:RETURN
+1445 DATA "!XUD", "!KEY",2, "U",17, "D",12
+
+1470 REM --12--
+1472 RESTORE 1475:RETURN
+1475 DATA "60SP","FR35176SM","MF"
+1480 DATA "!FR","35176", "!SC",8
+
+1500 REM --13--
+1502 RESTORE 1505:RETURN
+1505 DATA "FR3833SE","240SP"
+1510 DATA "FR4000SM","MF",
+1515 DATA "!FR","04000","MF"
+1516 DATA "9PR","  The Sun"
+1517 DATA "FR4280SM","!FR","04280","MF","CS"
+1518 DATA "FR4796SM","!FR","04796","MF"
+1522 DATA "9PR","(You are here.)"
+1525 DATA "FR4906SM","!FR","04906"
+1535 DATA "CS","FR35251SE", "!SC",5
+
+1600 REM --14--
+1602 RESTORE 1605:RETURN
+1605 DATA "1DS","5RA","CS","FR8440SE","240SP"
+1610 DATA "9PR"," [] move   (e) ends"
+1615 DATA "!KEY", 2, "R",18, "e",21
+
+1620 REM --18--
+1622 RESTORE 1625:RETURN
+1625 DATA "FR8600SM","MF","!FR","08600"
+1627 DATA "!SC", 19
+
+1630 REM --19--
+1632 RESTORE 1635:RETURN
+1635 DATA "!KEY", 2, "L",20, "e",21
+
+1650 REM --20--
+1652 RESTORE 1655:RETURN
+1655 DATA "FR8440SM","MR","!FR","08440"
+1660 DATA "!SC", 14
+
+1680 REM --21--
+1682 RESTORE 1685:RETURN
+1685 DATA "CS","FR35251SE","!SC",5
+
+1700 REM --15--
+1702 RESTORE 1705:RETURN
+1705 DATA "CS", "FR24574SE", "240SP"
+1710 DATA "9PR", " Interlock Rochester"
+1720 DATA "FR25800SM","MF", "!FR", "25800"
+1730 DATA "!SC",1,"FR35176SE", "!SC", 8
+
+1800 REM --16--
+1802 RESTORE 1805:RETURN
+1805 DATA "FR15420SE","240SP","MF"
+1810 DATA "FR16550SM"
+1820 DATA "9PR", " Interlock Rochester"
+1825 DATA "!FR","16550","!SC", 1
+
+1900 REM --17--
+1902 RESTORE 1905:RETURN
+1905 DATA "FR35924SE","CS","FR36046PL"
+1910 DATA "FR37125SE","FR37385PL"
+1920 DATA "!WAIT",3
+1930 DATA "FR35077SE","!SC",11
+
+2000 REM --1800
+2002 RESTORE 2005:RETURN
+
+9210 DATA "!PR","OK","!."
+9215 DATA "!XUD","!KEY",3, "U",2, "D",1, "e",4
+9220 DATA "!STOP"
+9999 PRINT #1,"pa"
