@@ -4,7 +4,7 @@ This repo is to contain various LaserDisc commanding programs and
 experiments.
 
 The inception of this project goes back to Kevin Savetz reviving
-the "Rollercoaster" game; "Adventures In Videoland", which was an
+David Lubar's "Rollercoaster" game; "Adventures In Videoland", which was an
 Applesoft BASIC program, running on an Apple II, connected to a
 Laserdisc player via its serial port, containing the Discovision
 release of the movie "Rollercoaster".  It was a text adventure game,
