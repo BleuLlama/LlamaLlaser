@@ -1,0 +1,61 @@
+10 REM Laser command test
+
+20 DEBUG = 1 : REM enable debug output
+21 TMOUT = 1000 : REM ticks to wait for a response
+22 RXOK = 0 : REM received a string
+23 RX$ = "" : TX$ = ""
+24 RESTORE
+
+30 GOSUB 100 : REM Initialize serial
+40 GOTO 1000 : REM Game.
+
+100 REM Serial BIOS thru line 140
+101 REM Hopefully, this is all that will need to chage for portinf
+
+110 REM Initialize serial port
+111 OPEN "COM:78N1DIN" FOR OUTPUT AS #1
+112 OPEN "COM:78N1DIN" FOR INPUT AS #2
+113 ON COM GOSUB 120
+114 COM ON
+119 RETURN
+
+120 REM RX a line serial data to R$
+121 LINE INPUT #2, RX$ : REM TANDY -read until <CR>
+122 RXOK=1
+123 IF DEBUG THEN PRINT "RX: "; RX$ 
+129 RETURN
+
+130 REM TX a line and wait for response
+131 IF DEBUG THEN PRINT "TX: "; TX$
+132 RXOK=0
+133 PRINT #1, TX$
+134 I = 0
+135 IF RXOK GOTO 139
+136 I = I + 1 
+137 IF I < TMOUT GOTO 135
+139 RETURN
+
+200 DATA "LOSE", -1
+210 DATA "FR100SE", "FR500PL", -1
+220 DATA "16SP", "FR3000SE", "MR", -1
+
+300 READ A$
+310 IF A$ = "-1" THEN RETURN
+320 TX$ = A$
+330 GOSUB 130
+340 GOTO 300
+
+1000 PRINT "Select Sequence"
+1010 INPUT A
+1020 ON A GOTO 1100, 1200, 1300
+1030 GOTO 1000
+
+1100 RESTORE 200
+1110 GOTO 300
+
+1200 RESTORE 210
+1210 GOTO 300
+
+1300 RESTORE 220
+1310 GOTO 300
+

@@ -348,7 +348,9 @@ the same codes as the above. (17, 18, 10, 11, 50, 52, 53, 54)
 # More Useful commands:
 ```
 0RA		all OSD text off
-1RA		just frame number
+1RA		just frame number (or time) (remember 1DS below)
+2RA		just chapter text
+3RA		time/frame + chapter
 4RA		Just user text
 5RA		User text + frame number
 xPR		print next line to osd line x

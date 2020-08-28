@@ -1,0 +1,142 @@
+@SCENE 1
+	# setup and config
+	@LD 
+		SQUELCHCOLOR BLACK
+		SQUELCH VIDEO AUDIO		# turn video and audio squelch back on
+		SEEKTO 01568			# Minds eye fadeup
+		PLAYTO 01700
+		CLEAROSD
+		OSD 2 C Adventures Through
+		OSD 17 C ~ Scott Lawrence ~
+		OSD 18 C Interlock Rochester
+		OSD 19 C Maker Faire 2018
+	@WAIT 
+		1
+	@LD 
+		OSD 10 C PRESS ENTER.
+	@EXIT 2 n "Press Enter."
+
+@SCENE 2
+	@LD
+		CLEAROSD
+		PLAYTO 01900		# Fadeout
+	@GO 3					# auto advance to scene 3
+
+@SCENE 3
+	@LD 
+		CLEAROSD
+		MULTISPEED 15
+		SEEKTO 35666
+		STOPMARKER 35285
+		MULTIPLAY REVERSE
+		:wq
+
+	@
+
+
+
+
+
+------------------
+Scene 2 - castle outside to in
+	auto action:
+		- seek to outside castle
+
+------------------
+Scene 3
+	auto action:
+		- 
+
+,35000,Castle zoomout
+slow reverse from far out, to front of castle
+
+~ Castle Entrance
+	- go towards the castle
+		- slow zoom in to castle
+
+	- leave 
+		- cut to gears moving, until playout
+		- reset to title
+
+
+------------------
+
+Filename,,MindsEye_Side1_WithCounter.mp4
+Frame 00001,,"0:00:04,09/30"
+,,
+,,
+CH,FR,Description
+01,00000,Chapter 1
+,00000,FBI Warning
+,00572,Image logo
+,,
+02,01226,Chapter 2
+,01226,Miramar logo
+,,
+03,01729,Chapter 3 - Creation
+,,"Globe, purple guts"
+,02360,Warp effect
+,02396,space
+,02700,galaxies
+,03900,one star
+,04700,earth
+,05100,lowres spheres with tadpoles
+,06500,under water
+,07100,"thru fish eye, plants"
+,07340,metal dinosaurs
+,07800,oversaturated pteranodons
+,08400,metal dinosaurs running
+,,
+04,09205,Chapter 4 - Civilization Rising
+,09205,Hand holding sphere rising
+,09300,greek statues and architecture
+,10300,escher greek
+,10700,indian style building
+,11100,gulls flying
+,11500,city growing
+,13500,neon lights over water to city
+,,
+05,14389,Chapter 5 - Heart of the Machine
+,14389,men pushing wheels
+,15200,blueprint gears
+,15800,inverting gears
+,16500,pen blueprint structure
+,17000,blue ball in green walls
+,17300,springs 
+,17700,pixels to buildings to sphere to satellite
+,18300,spikes in water
+,19100,taj mahal thing
+,20000,"thing getting through wall, shapes"
+,,
+06,21271,Chapter 6 - Technodance
+,21271,dancing metal color things.
+,22100,guitar guys
+,22300,walking woman
+,22600,"bouncing ball on wheel thing, toys"
+,23600,robot on elevator pushes button
+,23900,gold guys in escher structure
+,24100,unicycle guys on fractal pillars
+,26000,bouncing unifoot robots
+,27700,balerina
+,,
+07,28083,Chapter 7 - Post Modern
+,28083,Empire State Buildings
+,29300,Art gallery
+,29800,hexagons
+,30200,tube
+,30400,cubes
+,31300,digital flowers opening
+,31900,spikey things hatch
+,34000,jellyfish
+,34500,dancing color vines
+,35000,Castle zoomout
+,,
+08,35808,Chapter 8 - Love Found
+,35808,sphere world water/air
+,36900,hero bird
+,37100,hero fish
+,38000,fish good
+,38900,crash 
+,39500,kiss
+,,
+,40100,LEAD OUT
