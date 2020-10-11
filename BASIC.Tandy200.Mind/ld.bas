@@ -11,8 +11,8 @@
 100 REM ---- Serial BIOS thru line 149
 101 REM Hopefully, this is all that will need to chage for porting
 110 REM Initialize serial port
-111 OPEN "COM:78N1DII" FOR OUTPUT AS #1
-112 OPEN "COM:78N1DII" FOR INPUT AS #2
+111 OPEN "COM:78N1DIN" FOR OUTPUT AS #1
+112 OPEN "COM:78N1DIN" FOR INPUT AS #2
 113 ON COM GOSUB 120
 114 COM ON
 119 RETURN

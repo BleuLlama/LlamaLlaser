@@ -1,5 +1,27 @@
+Title: Using Vintage Computers to Command Real and Simulated Laserdisc Players
 
-Commanding LaserDisc Players from Retro Computers
+TODO: 
+	- Work Table Cleanup
+		- Put away Apple IIe 
+		- Put away 3D printer
+		- Put away hardware bits
+		- Clear table
+		- Set up pull-down shade
+		- set up lighting
+		- Set up tripod for camcorder 
+
+	- Set up demo unit
+		- Pull LDP from stack (blah!)
+		- Set up LCD panel for it, and/or 1084S-D1
+
+	- Assemble props
+		- Dell laptop
+		- Apple IIc with monitor
+		- Amiga with monitor
+		- Macbook Air with USB serial adapter
+
+		- MacBook with firewire
+			- DV Camcorder/bridge
 
 Overview
 	- Vintage LD Players (NTSC Composite SD Video)
