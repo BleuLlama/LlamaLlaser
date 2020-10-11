@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 ################################################################################
 #	
-#	LD.py
+#	Jumpy.py
 #
 ################################################################################
 #
@@ -25,6 +25,7 @@ import sys
 sys.dont_write_bytecode = True
 sys.path.append( 'libs' )
 import getopt
+import random
 
 # app stuff
 from libAppCore import AppCore
@@ -145,27 +146,47 @@ class LDDumperApp( AppCore ):
 
 		#response = self.ldp.Command( 'F?' );
 		self.ldp.ConfigureScreen()
+
+		self.ldp.OSD( 1, 'python LDP demo' );
 		self.ldp.SpinUp()
+
+		self.ldp.Squelch( False )
 
 		
 		nFrames = self.ldp.CountFrames();
-		print "Disc has {} Frames.".format( nFrames );
+		print "Disc has {} Frames.".format( nFrames )
+		self.ldp.OSD( 8, '{} frames'.format( nFrames ))
 
 		# DiscoVision disks show their startup animation all
 		# on frame 0.  so the last frame 0 before frame 1 is
 		# the real frame 0.
 		# so, seek to frame 1, then go back one.
-		self.ldp.Seek( 1 )
-		self.ldp.StepReverse()
+		#self.ldp.Seek( 1 )
+		#self.ldp.StepReverse()
 		self.ldp.DBG()
 
-		for fr in range( 0, nFrames ):
-			if not self.frameExists( fr ):
-				self.capture( fr )
-			self.ldp.StepForward()
+		for x in range( 0, 200 ):
+			# pick a random frame
+			fr = random.randrange( 2000, nFrames-2000 )
+			self.ldp.Seek( fr );
 
+			c = random.randrange( 0, 3 )
+			if( c == 0 ):
+				for y in range( 0, random.randrange( 5, 35 )):
+					self.ldp.StepForward()
+			if( c == 1 ):
+				for y in range( 0, random.randrange( 5, 35 )):
+					self.ldp.StepReverse()
+			if( c == 2 ):
+				for y in range( 0, random.randrange( 1, 4 )):
+					self.ldp.SkimForward() # messy scan forward
+			if( c == 3 ):
+				for y in range( 0, random.randrange( 1, 4)):
+					self.ldp.SkimReverse()
+
+		self.ldp.DBG( "Ending." )
 		print "Shutting down..."
-		self.ldp.Stop()
+		###self.ldp.Stop()
 		self.ldp.DBG()
 		self.theSerial.closeConnection()
 
