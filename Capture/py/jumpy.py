@@ -39,7 +39,7 @@ from GS_Timing import delay,micros,millis
 ################################################################################
 # main command line interface routines
 
-class LDDumperApp( AppCore ):
+class LDJumpyApp( AppCore ):
 
 	def usage( self ):
 		print "App.py <options>"
@@ -192,5 +192,5 @@ class LDDumperApp( AppCore ):
 
 
 if __name__ == "__main__":
-		deckApp = LDDumperApp()
-		deckApp.main(sys.argv[1:])
+		theApp = LDJumpyApp()
+		theApp.main(sys.argv[1:])

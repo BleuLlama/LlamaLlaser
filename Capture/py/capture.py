@@ -1,11 +1,12 @@
 #!/usr/local/bin/python
 ################################################################################
 #	
-#	LD.py
+#	capture.py
 #
 ################################################################################
 #
-#	v001 2020-08-21 SDL initial version
+#	v002 2020-10-10 SDL - Additional refinements
+#	v001 2020-08-21 SDL - initial version
 
 ################################################################################
 # you may need to install pyserial:
@@ -16,6 +17,9 @@
 #	curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 ################################################################################
 
+# requires the command imagesnap which captures a frame of video
+# from the firewire video source and saves it as a PNG
+#
 ################################################################################
 # importing libraries...
 
@@ -171,5 +175,5 @@ class LDDumperApp( AppCore ):
 
 
 if __name__ == "__main__":
-		deckApp = LDDumperApp()
-		deckApp.main(sys.argv[1:])
+		theApp = LDDumperApp()
+		theApp.main(sys.argv[1:])
