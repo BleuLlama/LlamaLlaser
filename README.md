@@ -55,6 +55,15 @@ I will probably bring my LaserDisc simulator into this repo eventually,
 and extend it to support the Level III commands that I am using in
 my program. 
 
+I also plan on providing starting points for the following system configurations:
+
+- Mac System 6 / Mac System 7 - Hypercard
+- AmigaDOS - AmigaBASIC
+
+There also will be, either in here, or elsewhere, a QT-based application 
+that will simulate a LaserDisc player, able to be run standalone on a 
+Raspberry Pi,  controllable via serial or over the network.
+
 
 --- 
 
