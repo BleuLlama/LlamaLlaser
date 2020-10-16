@@ -17,7 +17,13 @@ with laserdisc-provided visuals.  (links to come soon.)
 The **Resources** directory contains my command cheatsheet, and the
 manual from which all of the content was extracted from.
 
-## BASIC
+
+## Library
+
+This directory contains the various libraries and example code that 
+communicate from various systems to the LaserDisc player.
+
+## Library/BASIC
 The **BASIC** directory contains BASIC language programs that I have
 written to do similar processes.  My version is based on the Tandy
 200 portable computer.  It has a different syntax to Applesoft
@@ -26,6 +32,20 @@ BASIC, but I hope to have ports to it available eventually.
 Mine is based on using a Pioneer CLD-V2400 player, with the NTSC
 Image Entertainment disc "The Mind's Eye", which is available used
 at fairly cheap prices, and contains lots of great 90s CG animations.
+
+## Library/Python
+
+This directory contains the various python programs for capturing
+from the LDP, as well as for commanding it in various ways.  It 
+also contains a library that bundles the serial interface into a 
+more pythony interface.
+
+## Hardware
+
+This directory contains related hardware projects, with kicad schematics,
+board layouts and also the schematics in PDF format.
+
+Note: you may also be interested in my [LlamaVideoSwitcher](https://github.com/BleuLlama/LlamaVideoSwitcher)  project.
 
 
 # Future
