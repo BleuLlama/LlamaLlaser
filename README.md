@@ -23,8 +23,9 @@ manual from which all of the content was extracted from.
 This directory contains the various libraries and example code that 
 communicate from various systems to the LaserDisc player.
 
-## Library/BASIC
-The **BASIC** directory contains BASIC language programs that I have
+## Library/Tandy200
+
+The **TANDY200** directory contains BASIC language programs that I have
 written to do similar processes.  My version is based on the Tandy
 200 portable computer.  It has a different syntax to Applesoft
 BASIC, but I hope to have ports to it available eventually.
@@ -35,7 +36,7 @@ at fairly cheap prices, and contains lots of great 90s CG animations.
 
 ## Library/Python
 
-This directory contains the various python programs for capturing
+The **Python**  directory contains the various python programs for capturing
 from the LDP, as well as for commanding it in various ways.  It 
 also contains a library that bundles the serial interface into a 
 more pythony interface.
