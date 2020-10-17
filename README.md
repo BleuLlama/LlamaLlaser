@@ -23,8 +23,9 @@ manual from which all of the content was extracted from.
 This directory contains the various libraries and example code that 
 communicate from various systems to the LaserDisc player.
 
-## Library/BASIC
-The **BASIC** directory contains BASIC language programs that I have
+## Library/Tandy200
+
+The **TANDY200** directory contains BASIC language programs that I have
 written to do similar processes.  My version is based on the Tandy
 200 portable computer.  It has a different syntax to Applesoft
 BASIC, but I hope to have ports to it available eventually.
@@ -35,7 +36,7 @@ at fairly cheap prices, and contains lots of great 90s CG animations.
 
 ## Library/Python
 
-This directory contains the various python programs for capturing
+The **Python**  directory contains the various python programs for capturing
 from the LDP, as well as for commanding it in various ways.  It 
 also contains a library that bundles the serial interface into a 
 more pythony interface.
@@ -53,6 +54,15 @@ Note: you may also be interested in my [LlamaVideoSwitcher](https://github.com/B
 I will probably bring my LaserDisc simulator into this repo eventually,
 and extend it to support the Level III commands that I am using in
 my program. 
+
+I also plan on providing starting points for the following system configurations:
+
+- Mac System 6 / Mac System 7 - Hypercard
+- AmigaDOS - AmigaBASIC
+
+There also will be, either in here, or elsewhere, a QT-based application 
+that will simulate a LaserDisc player, able to be run standalone on a 
+Raspberry Pi,  controllable via serial or over the network.
 
 
 --- 
