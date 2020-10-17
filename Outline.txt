@@ -1,0 +1,480 @@
+
+    [ pic of this title slide:
+
+    Commanding LaserDisc Players from Retro Computers
+	Scott Lawrence
+	2020-Oct
+
+
+    [ pic of laser disc rainbows ]
+
+This is a laserdisc.  
+
+Laserdiscs were a video storage system 
+available from the 1970s through the early 2000s
+
+This talk will be about some interactive uses we can
+do on them now, as well as replacements for the 
+expensive parts, so we can do this on the cheap.
+
+I will not go deep in depth about the details of 
+the format, nor many of the other alternatives.
+
+All of the sharable content from this talk will be
+listed in the github repository mentioned at the end of this talk.
+
+First lets have a VERY brief overview of the LaserDisc format.
+
+	[ pic? ]
+
+LaserDisc was a playback-only, non-recordable 425 line Standard Definition
+analog video storage system, with two stereo audio tracks available.
+
+    [ pic of some movies ]
+
+It was primarily used for movies for the home theater, 
+but it also had some industrial and commercial uses 
+such as  repeating displays in stores, or for interactive museum displays
+
+It could have 30 minutes or 60 minutes per side depending on the 
+format of the video on each side.
+
+In the 30 minute mode, known as C.A.V.
+a movie would have more "disc flips" but 
+you could do special effects on the disc on
+more affordable players, like
+
+    visible searching
+    stillframes
+    frame stepping
+    and so on
+
+
+    [ pic of the games listed below ]
+
+This is the mode that was used for industrial uses
+as well as for some video games, such as:
+
+	- Dragon's Lair and Space Ace from Cinematronics in 1983
+	and 1984 respectively
+
+	- Mad Dog McCree from American Laser Games in 1990
+
+	- Time Traveller from Sega in 1991
+
+	and a handful of others
+
+
+For these applications the "industrial" laserdisc players 
+had fewer front panel options in comparison to "home-use" players. 
+
+They also included a communications port of some kind, and 
+generally were built like tanks, and still run well nowadays.
+
+	[ pic of my CLD]
+
+This is mine.  A Pioneer CLD-V4200 from 1995.  I got it for $75 at 
+Record Archive, and I've seen them for a similar amount on ebay,
+plus shipping.  THey likely cost a ton more than that when new.
+
+	[ serial port connection on the back ]
+
+It has a serial port connection on the back, that lets you 
+control the player using standard 4800 baud RS-232 Serial connection
+with plaintext ASCII commands and responses.  Mine, and many
+Pioneer units like it from the 80s and 90s all used the same
+communications protocol.
+
+	[ diagram of system setup ]
+
+The basic setup consisted of something like this.
+You would have a computer of some kind, or an arcade board for games
+like Dragon's Lair... or an Amiga for games like Mad Dog.
+
+The player would control the computer which would in-turn control playback
+of the laserdisc.
+
+	[ video of Apple IIc playing rollercoaster ]
+
+That computer board could be replaced in the above diagram with 
+a home computer such as this Apple IIc that is running a BASIC
+program, and changing playback of the movie "Rollercoaster" 
+This is an interactive fiction text-based game
+
+It originally ran on an Apple II with a specialized 
+communications interface card, but this version is modified
+to run using a standard "Super Serial" card, or the built-in
+serial port on the Apple IIc
+
+	[ punch-in - video switcher] 
+
+With additional hardware bits like this video switching interface
+I threw together, the computer can switch between the output of 
+the player and the output of the computer.  
+
+    [ second diagram of flow ]
+
+The computer side of this was swapped around for the various
+applications needed. 
+
+For example, the "Domesday" project from the UK in the 1980s
+used a BBC Micro computer.
+
+The one portion of these systems that was always a constant
+though, was the Laserdisc Player.  Sure there were players
+from Sony or Pioneer, but there was always a player
+
+The Disc media itself required a heavy cost to create, master
+and reproduce, making it completely cost prohibive for home
+use.
+
+
+[ rollercoaster?]
+
+which is why games like Rollercoaster here used an existing
+movie for the laserdisc content.  
+
+
+[ demo of scanner weird thing]
+
+One of the things that makes this possible is that in CAV 
+mode, you have full control of the player down to the frame
+
+There's some weirdness involved about converting 24 frames
+per second video to 60 fields per second video stored on 
+the disc, but I'm not going to get into that in this presentation.
+
+Suffice it to say that the player can seek to specific frames 
+very quickly, and you can play in forward, reverse, at 
+various speeds.  
+
+You can see this demonstrated here using the python script
+running on my laptop, doing odd playback things to this 
+Laserdisc of Duran Duran music videos.
+
+[ demo of Tandy 200 video ]
+
+You can also put text on the screen as you can see in
+this interactive thing I made for Rochester Maker Faire
+2018, running on this Tandy 200 portable computer.
+
+It's a BASIC-based database of rooms, and uses one 
+side of the 1990s computer graphics Laserdisc 
+title "The Mind's Eye".
+
+So this brings us to today.
+
+There's a heck of an overhead for getting into 
+messing around with these.  You will need a laserdisc player
+and disc to play on it.  This can be very prohibitive 
+for someone who just wants to experiment with this.
+
+Similarly, you're limited to any CAV titles or sides that
+already exist... which could be difficult or expensive 
+to find.
+
+
+	[ demo of something? ]
+
+I am working on a Raspberry-Pi Zero based solution that will
+Simulate a laserdisc player.  It will not have the accuracy	
+of the Domesday project, but it also will be buildable with 
+the video switch for about $20.
+
+There are already existing hardware player replacement 
+devices such as Dexter for laserdisc arcade games, which
+costs about $400 or more, plus media files.
+
+There's also the Domesday Project, which recreates laserdiscs
+with perfect accuracy.  The hardware necessary to capture
+and play back the media using this project's devices is 
+very expensive, and requires terabytes of storage for a single side
+
+
+	[ video demo of capturing frame by frame (simulated) ]
+
+My capture solution is an automated quicktime/firewire/python
+solution that steps through the disc side frame by frame, saving
+frames, then captures the entire side as an audio file.
+
+The playback mechanism will be a QT-based portable application
+that will be run on a raspberry pi with composite output.  It 
+can also be ported to and run on any modern computer instead.
+
+This is a "just-right for enthusiasts" solution.  It
+will not be 100% timing accurate, but will be more than
+good enough, especially for the price point.
+
+
+	[ end title card ]
+
+	Commanding LaserDisc Players from Retro Computers
+	Scott Lawrence
+
+	(github url)
+
+	Thank you
+	
+
+I'm also working on a few laserdisc libraries for various 
+systems to make it easier to communicate with players.
+
+I have a github repository with starter library code for 
+	- Amiga Basic
+	- Tandy 100, 102, and 200 Microsoft Basic
+	- Python for modern systems
+
+And planned support for
+	- Hypercard for classic macintoshes
+	- Apple II BASIC
+
+
+The repo also has the final schematic of the video switcher 
+shown earlier, as well as including the raspberry pi and QT
+solution as that is created.
+
+
+Thank you for your time, be well, and enjoy!
+
+--------------------------------------------------------------------------------
+
+LD Player and LaserDisc Simulation
+	- Daphne - Laserdisc game emulator (like MAME)
+	- Dexter - LD Replacement (solid state)
+		- Specific for arcade LD Players/replacements
+		- $400 if available
+		Required User Level: Arcade owner, Hardcore
+		- actual drives are $80+
+		- adapter boards $200+ if available
+	- Domesday Project
+		- Made for preserving the Domesday LaserDisc + BBC Micro
+		systems from the UK in the 1980s.
+		- Captures the actual RF stream from the disc itself
+		- Stores a representation of the video SIGNAL. not frames.
+		- Requires modified LD Player + $300 capture hardware
+		- High end system to decode the stream and play it back
+		- 75 gigabytes per side (30 mins) of a disk
+		Required User level: Preservationist, Hardcore
+	- LlamaLlaser
+		- Capture system is: (LL-CAP)
+			LD Player -> Firewire DV bridge -> Mac
+			Serial cable from Mac to LD player
+			Python script to:
+			- seek to a frame number
+			- use quicktime to framegrab a PNG or JPG from the video
+			- save it with the frame number
+			- repeat
+		- playback system is software running on a raspberry Pi Zero
+			and a USB serial interface ($10 total)
+			(LL-PS)
+			- simulates the L3 Protocol interactions
+			- Simulates playback and onscreen display
+			- possible ideas: IR receiver for remote commands
+		- Drop-in replacement for Pioneer players.
+		- very cheap to make, reasonable capture sizes.
+		Required User Level: Enthusiast
+
+My github project has example programs for multiple platforms to get 
+started if you want, and the LlamaLlaser playback system will be available
+there in the near future.
+
+
+https://www.arcadecab.com/Projects/Dragons_Lair.htm
+--------------------------------------------------------------------------------
+		- even though it's per-rotation, it's still a spiral track.
+		- the laser can move slowly along the track to follow this
+		- some players, like those used for video games like 
+		dragon's lair, can actually seek up to 1 minute forward or 
+		backwards without glitching.  Mine can only do a few frames.
+		This is where the big cost difference in industrial players applies.
+		- used for multispeed/scan forward/reverse
+	- Frame numbers are baked into the video
+	- but are not necessarily 1:1 for 30/60fps on the disk!- 
+		Here's why...
+		This gets a little into the gritty bits of how the video
+		frames are stored on the disk, but it's essential for
+		this process..
+
+	- 2:3 pulldown from 24fps to (29.97FPS) 30FPS 
+		This converts 24 frames per second of the original 
+		motion picture film to 29.97 frames per second of 
+		our NTSC Standard Definition video.  For simplicity
+		sake, i'm just going to call this 30 frames per second
+		NTSC.
+
+		To do this, they repeat the frames in a process called
+		a three-two pulldown.  There are a couple ways this can
+		be done, but I'm only going to cover the more modern
+		version that is easier to understand.
+
+		Classic 3:2
+		                 ** **     <- dirty "mixed" frames
+		A B C D -> AA BB BC CD DD 
+			   2  3   2  3
+
+		Laserdisc players can move the laser in between 
+
+		Modern 3:2
+		(more judder, better compression)
+		2:3:3:2     2  3   3    2
+		A B C D ->  AA BB BC CC DD	
+			B and C run for 1 field longer than A and D
+			causing judder in slow pans, etc.
+
+		https://en.wikipedia.org/wiki/Three-two_pull_down
+	- LD steps through the video like: A, B, C, D, E, F
+	- The frame numbers are baked into one of the scanlines on the disk
+		- like closed captioning
+	- The player is smart enough to move the laser to catch the right fields
+	- stepping through frames skips over the dirty/mixed frames.
+		Original 24fps video
+		    0  A
+		    1  B
+		    2  C
+		    3  D
+		    4  E
+		    5  F
+		    6  G
+		    7  H
+
+		NTSC frame 	LD Frame (reverse pulldown of sorts)
+		   0 1 
+		0  A A		00000
+		1  B B		00001
+		2  B C			(skipped)
+		3  C C		00002
+		4  D D		00003
+		------
+		5  E E		00004	
+		6  F F		00005
+		7  F G			(skipped)
+		8  G G		00006
+		9  H H		00007
+
+	But if you were to capture the video output of it playing, you 
+	will see the skipped frames that combine the two interleaved fields.
+
+Footage examples to use:
+	- show the player spinning up and moving the head assembly while playing
+	- Beginning of discovision title with 00000 frame numbers
+	- Seeking on the disk with squelch off
+
+COmmandable Players
+	- Generally made for industrial applications, so they last FOREVER
+	- made to run with the disc spinning for hours/days without stopping
+	- Generally have less user interface stuff.
+		- mine has no buttons or display on the front for consumer usage
+		- on screen display is minimal and disabled by default
+
+	- RS232 interface, easy to command.
+
+Commanding
+	- Companies have their own protocols. Sony and Pioneer for example
+	I will cover some Pioneer commands from their "Level 3" protocol here.
+	- L3 contained commands for
+		- CD controlling (newer models)
+		- DVD controlling (newest models)
+		- disc status (playing, stopped, current frame, time, chapter)
+		- Commanding
+			- Seek to frame/chapter/timecode X
+			- Play
+			- Step forward/backward
+			- Slow speed forward/backward, multiple speeds
+			- Turn off Screen or audio squelch (FUN!)
+	- VERY simple text-based protocol!
+		usually the sequence is:
+		2 characters for what a number means (FRame, CHapter)
+		1-5 numerical digits for the value
+		2 character sequence for command
+		[RETURN] <CR>  '\r'
+	    returned from the disk are things like:
+		R<CR>		player is ready (no error)
+		E01<CR>		error code 01
+		22930<CR>	number sequence
+
+Example program
+	Spin up disc, seek to frame 0
+		PL<CR> 		R<CR>
+	Seek to end of disc
+		(FRame mode, LO lead-out of disk (end), SEek and stillframe)
+		FRLOSE<CR> 	<time>		 R<CR>
+	Get frame number (last frame)
+		?F<CR>
+				12000<CR>
+	Seek to frame 12342, and stillframe
+		FR12342SE<CR>	 <time>	 R<CR>
+	Stillframe forward by one frame
+		SF<CR>
+				R<CR>
+
+	Seek to frame 12400 then play
+		FR12400PL<CR> 	<time>
+
+Other Cool Things To Do:
+	- disable video/audio squelch on seek, pause
+		192RB<CR>	R<CR>
+		(demo)
+
+	- Multispeed (slow/fast playback)
+
+	- Onscreen text (9 lines 0..9, up to 20 chars per line)
+	turn on onscreen text only
+		4RA<CR> 	R<CR>	
+	print text on line 1
+		1PR<CR>		R<CR>
+	print it
+		HELLO<CR>	R<CR>
+	- Disable remote controls
+		0KL<CR>		R<CR>
+	- Wait on number button input from controller
+		?N<CR>		(wait)	7<CR>	(user pressed '7')
+	- Get last pressed of ANY button (without wating)
+		#I<CR>		17<CR>		(user last pressed 'play')
+	- or break out if there's a problem:
+		CL<CR>		R<CR>
+--------------------------------------------------------------------------------
+
+
+Communications Configuration
+For RS-232C communications, the configuration description consists of a five character string of the format rwpbs, where:
+
+r Baud Rate. This is a number from 1 to 9, where 
+	1 = 75; 
+	2 = 110 ; 
+	3 = 300 ; 
+	4 = 600 ; 
+	5 = 1200 ; 
+	6 = 2400 ; 
+	7 = 4800 ; 
+	8 = 9600 ; 
+	9 = 19200. 
+	M may be used. M sets built-in modem to 300 baud.
+
+w Word Length. This is a number from 6 to 8, where 
+	6 = 6 bits; 
+	7 = 7 bits; 
+	8 = 8 bits.
+
+p Parity. Either E,O,N, or I where 
+	E = Even ; 
+	O = Odd ; 
+	N = None; 
+	I= Ignore.
+
+b Stop Bits. Either 1 or 2, where 
+	1 = 1 stop bit; 
+	2 = 2 stop bits.
+
+s XON/XOFF Status. Either E or D, where 
+	E = Enable; 
+	D = Disable.
+
+78N1DII
+      ^- Line spacing:  N- CR,  I = CR/LF
+     ^-- Normal control filter,  Ignore all ctrl-characters
+      ,O  originate
+      ,A  answer
+        ,10  10 pps pulse dialing 
+        ,20  20 pps fast pulse
+        ,T   tone dialing
+    ^--- XonXoff
