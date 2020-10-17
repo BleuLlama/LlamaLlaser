@@ -1,4 +1,4 @@
-' Demo AmigaBASIC program to talk with an LD Player
+ ' Demo AmigaBASIC program to talk with an LD Player
 ' 	yorgle@gmail.com
 '
 '  v1.0 - 2020-10 - Initial version
@@ -27,7 +27,7 @@ CALL LDSendReadLn( "FRLOSE", response$ )
 CALL LDSendReadLn( "FR00000SE", response$ )
 
 FOR a=1 TO 20
-	PRINT "Seek to frame " + a
+	PRINT "Seek to frame "; a
 	CALL LDSeek( a )
 NEXT a
 
@@ -92,7 +92,7 @@ SUB LDSend( theCommand$ )
 	IF( ldEchoTx = 1 ) THEN
 		PRINT "TX: ";theCommand$
 	END IF 
-	PRINT #1, theCommand$+CHR$(13)
+	PRINT #1, theCommand$;CHR$(13)
 END SUB
 
 
@@ -104,11 +104,11 @@ SUB LDReadLn( theResponse$ )
 	theResponse$ = ""
 	ch$ = ""
 	WHILE (NOT ch$ = CHR$(13))
-		ch$ = INPUT$(1,1)
+		ch$ = INPUT$(1,1)  '  fails here.
 		'CR ends a string.
 		IF( NOT ch$ == CHR$(13)) THEN
 			theResponse$ = theResponse$ + $ch
-		ENDIF
+		END IF
 	WEND
 
 	IF( ldEchoRx = 1 ) THEN
