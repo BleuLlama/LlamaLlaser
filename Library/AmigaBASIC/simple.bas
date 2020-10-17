@@ -3,6 +3,8 @@
 ' 
 '  2020-10-17 yorgle@gmail.com
 '
+'  Note: if the LDP doesn't respond, this hangs because AmigaBASIC
+
 
 '''''''''''''''''''''''''''''''''''''''''
 ' connect to the serial port, for read-write
