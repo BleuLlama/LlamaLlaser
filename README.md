@@ -3,12 +3,15 @@
 This repo is to contain various LaserDisc commanding programs and
 experiments.
 
-The inception of this project goes back to Kevin Savetz reviving
-David Lubar's "Rollercoaster" game; "Adventures In Videoland", which was an
+The inception of this project goes back to Kevin Savetz' revival of
+David Lubar's "Rollercoaster" game, 
+[Adventures In Videoland](https://github.com/BleuLlama/AdventuresInVideoland).
+
+This is an
 Applesoft BASIC program, running on an Apple II, connected to a
 Laserdisc player via its serial port, containing the Discovision
 release of the movie "Rollercoaster".  It was a text adventure game,
-with laserdisc-provided visuals.  (links to come soon.)
+with laserdisc-provided visuals. 
 
 
 # Repo Contents
@@ -22,6 +25,12 @@ manual from which all of the content was extracted from.
 
 This directory contains the various libraries and example code that 
 communicate from various systems to the LaserDisc player.
+
+## Library/AmigaBASIC
+
+The **AmigaBASIC** directory contains example programs that can talk
+with the LDP on an Amiga running AmigaBASIC.  Note that AmigaBASIC 
+was only stable (if you can call it that) up through AmigaDOS 1.3.
 
 ## Library/Tandy200
 
@@ -46,7 +55,7 @@ more pythony interface.
 This directory contains related hardware projects, with kicad schematics,
 board layouts and also the schematics in PDF format.
 
-Note: you may also be interested in my [LlamaVideoSwitcher](https://github.com/BleuLlama/LlamaVideoSwitcher)  project.
+Note: you may also be interested in my [LlamaVideoSwitcher](https://github.com/BleuLlama/LlamaVideoSwitcher) project. 
 
 
 # Future
@@ -58,7 +67,7 @@ my program.
 I also plan on providing starting points for the following system configurations:
 
 - Mac System 6 / Mac System 7 - Hypercard
-- AmigaDOS - AmigaBASIC
+- Apple II Applesoft BASIC
 
 There also will be, either in here, or elsewhere, a QT-based application 
 that will simulate a LaserDisc player, able to be run standalone on a 
