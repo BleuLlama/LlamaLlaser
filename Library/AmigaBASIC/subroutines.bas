@@ -56,7 +56,8 @@ END SUB
 '
 SUB LDConnect()
   ' connect to the serial port as a file
-  OPEN "SER:4800,N,8,1" AS #1
+  OPEN "SER:4800,N,8,1" FOR INPUT AS 2
+  OPEN "SER:4800,N,8,1" FOR OUTPUT AS 2
 END SUB
 
 
@@ -65,7 +66,7 @@ END SUB
 '
 SUB LDDisconnect()
   ' disconnect the serial port file
-  CLOSE 1
+  CLOSE 1,2
 END SUB
 
 
@@ -92,7 +93,7 @@ SUB LDSend( theCommand$ )
   IF ldEchoTx = 1 THEN
     PRINT "TX: ";theCommand$
   END IF 
-  PRINT #1, theCommand$;CHR$(13)
+  PRINT #2, theCommand$;CHR$(13)
 END SUB
 
 

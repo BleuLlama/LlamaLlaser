@@ -6,18 +6,19 @@
 
 '''''''''''''''''''''''''''''''''''''''''
 ' connect to the serial port, for read-write
-OPEN "SER:4800,N,8,1" AS #1
+OPEN "SER:4800,N,8,1" FOR INPUT AS 1
+OPEN "SER:4800,N,8,1" FOR OUTPUT AS 2
 
 
 '''''''''''''''''''''''''''''''''''''''''
 ' FRame LeadOut SEek. (end of disc side)
-PRINT #1, "FRLOSE"+CHR$(13)
+PRINT #2, "FRLOSE";CHR$(13)
 GOSUB PrintResponse
 
 
 '''''''''''''''''''''''''''''''''''''''''
 ' current Frame number request
-PRINT #1, "?F";CHR$(13)
+PRINT #2, "?F";CHR$(13)
 
 ' read the response. should be like "45231<CR>"
 GOSUB PrintResponse
@@ -25,7 +26,7 @@ GOSUB PrintResponse
 
 '''''''''''''''''''''''''''''''''''''''''
 ' FRame 00000 SEek
-PRINT #1, "FR00000SE"+CHR$(13)
+PRINT #2, "FR00000SE";CHR$(13)
 
 ' read the response. should be "R<CR>"
 GOSUB PrintResponse
@@ -33,7 +34,7 @@ GOSUB PrintResponse
 
 '''''''''''''''''''''''''''''''''''''''''
 ' close the serial port
-CLOSE #1
+CLOSE 1,2
 END
 
 
@@ -46,7 +47,7 @@ PrintResponse:
   ' read the response. should be "R<CR>"
   r$ = ""
   c$ = ""
-  WHILE NOT c$ = CHR$(13)
+  WHILE c$ <> CHR$(13)
     c$ = INPUT$(1,1)      ' ERROR: FIELD overflow
     r$ = r$ + c$
   WEND
