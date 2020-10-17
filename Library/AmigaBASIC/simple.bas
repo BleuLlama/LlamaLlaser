@@ -8,19 +8,18 @@
 
 '''''''''''''''''''''''''''''''''''''''''
 ' connect to the serial port, for read-write
-OPEN "SER:4800,N,8,1" FOR INPUT AS 1
-OPEN "SER:4800,N,8,1" FOR OUTPUT AS 2
+OPEN "R",#1,"SER:4800,N,8,1"
 
 
 '''''''''''''''''''''''''''''''''''''''''
 ' FRame LeadOut SEek. (end of disc side)
-PRINT #2, "FRLOSE";CHR$(13)
+PRINT #1, "FRLOSE";CHR$(13)
 GOSUB PrintResponse
 
 
 '''''''''''''''''''''''''''''''''''''''''
 ' current Frame number request
-PRINT #2, "?F";CHR$(13)
+PRINT #1, "?F";CHR$(13)
 
 ' read the response. should be like "45231<CR>"
 GOSUB PrintResponse
@@ -28,7 +27,7 @@ GOSUB PrintResponse
 
 '''''''''''''''''''''''''''''''''''''''''
 ' FRame 00000 SEek
-PRINT #2, "FR00000SE";CHR$(13)
+PRINT #1, "FR00000SE";CHR$(13)
 
 ' read the response. should be "R<CR>"
 GOSUB PrintResponse
@@ -36,7 +35,7 @@ GOSUB PrintResponse
 
 '''''''''''''''''''''''''''''''''''''''''
 ' close the serial port
-CLOSE 1,2
+CLOSE 1
 END
 
 
