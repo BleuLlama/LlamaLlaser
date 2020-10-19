@@ -1,61 +1,66 @@
-'  Simple example code to send and receive serial responses
-'  AmigaBASIC to Serial Port/Pioneer L3 LaserDisc Player
-' 
-'  2020-10-17 yorgle@gmail.com
-'
-'  Note: if the LDP doesn't respond, this hangs because AmigaBASIC
+ldEchoRx = 1
+ldEchoTx = 1
 
 
-'''''''''''''''''''''''''''''''''''''''''
-' connect to the serial port, for read-write
-REM OPEN "R",#1,"SER:4800,N,8,1"
-OPEN "com1:4800,N,8,1" AS #1
+CALL LDConnect
 
+CALL LDSendReadLn( "192RB", response$ )
+CALL LDSendReadLn( "1DS", response$ )
 
-'''''''''''''''''''''''''''''''''''''''''
-' FRame LeadOut SEek. (end of disc side)
-PRINT #1, "FRLOSE";CHR$(13)
-GOSUB PrintResponse
+FOR b = 0 TO 20
+CALL LDSendReadLn( "FRLOSE", response$ )
+CALL LDSendReadLn( "?F", response$ )
+CALL LDSendReadLn( "FR0SE", response$ )
 
+NEXT b
 
-'''''''''''''''''''''''''''''''''''''''''
-' current Frame number request
-PRINT #1, "?F";CHR$(13)
-
-' read the response. should be like "45231<CR>"
-GOSUB PrintResponse
-
-
-'''''''''''''''''''''''''''''''''''''''''
-' FRame 00000 SEek
-PRINT #1, "FR00000SE";CHR$(13)
-
-' read the response. should be "R<CR>"
-GOSUB PrintResponse
-
-
-'''''''''''''''''''''''''''''''''''''''''
-' close the serial port
-CLOSE 1
+CALL LDDisconnect
 END
 
+SUB LDSeek( f ) STATIC
+  CALL LDSendReadLn( "FR" + STR$(f) + "SE", response$ )
+  END SUB
+  
 
-'''''''''''''''''''''''''''''''''''''''''
-' Subroutines
+SUB LDConnect STATIC
+  PRINT "Opening LD INPUT"
+  OPEN "COM1:4800,N,8,1" AS #1
+  END SUB
 
-' Get and print the response
+SUB LDDisconnect STATIC
+  PRINT "Closing LD"
+  CLOSE 1
+END SUB
+  
+SUB LDSendReadLn( theCommand$, theResponse$ ) STATIC
+  CALL LDSend( theCommand$ )
+  CALL LDReadLn( theResponse$ )
+END SUB
 
-PrintResponse:
-  ' read the response. should be "R<CR>"
-  r$ = ""
-  c$ = ""
-  WHILE c$ <> CHR$(13)
-    IF LOC(1) THEN     ' character available?
-      c$ = INPUT$(1,1)
-      IF c$>"" THEN
-        r$ = r$ + c$   ' append it
+SUB LDSend( theCommand$ ) STATIC
+SHARED ldEchoTx
+  IF( ldEchoTx = 1 ) THEN
+    PRINT "TX: ";theCommand$;"<CR>"
+  END IF
+  PRINT#1,theCommand$;CHR$(13)
+END SUB
+
+SUB LDReadLn( theResponse$ ) STATIC
+SHARED ldEchoRx
+  theResponse$ = ""
+  ch$ ="X"
+  WHILE NOT ch$ = CHR$(13)
+    ch$=INPUT$(1,1)
+    PRINT "GOT: ";ASC(ch$)
+    IF LOC(1) THEN
+      IF NOT ch$ = CHR$(13) THEN
+        PRINT "GOT ";ch$
+        theResponse$ =theResponse$ + ch$
       END IF
     END IF
   WEND
-  PRINT "RX: "; r$
-  RETURN
+  
+  IF( ldEchoRx = 1 ) THEN
+    PRINT "RX: ";theResponse$
+  END IF
+END SUB
