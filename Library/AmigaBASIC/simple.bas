@@ -8,7 +8,8 @@
 
 '''''''''''''''''''''''''''''''''''''''''
 ' connect to the serial port, for read-write
-OPEN "R",#1,"SER:4800,N,8,1"
+REM OPEN "R",#1,"SER:4800,N,8,1"
+OPEN "com1:4800,N,8,1" AS #1
 
 
 '''''''''''''''''''''''''''''''''''''''''
@@ -49,8 +50,12 @@ PrintResponse:
   r$ = ""
   c$ = ""
   WHILE c$ <> CHR$(13)
-    c$ = INPUT$(1,1)      ' ERROR: FIELD overflow
-    r$ = r$ + c$
+    IF LOC(1) THEN     ' character available?
+      c$ = INPUT$(1,1)
+      IF c$>"" THEN
+        r$ = r$ + c$   ' append it
+      END IF
+    END IF
   WEND
   PRINT "RX: "; r$
   RETURN

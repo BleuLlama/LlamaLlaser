@@ -44,7 +44,7 @@ END
 '  Seek to a specific frame of the LDP
 '
 SUB LDSeek( frameno, response$ )
-  CALL LDSendReadLn( "FR" + frameno + "SE", response$ )
+  CALL LDSendReadLn( "FR" + STR$(frameno) + "SE", response$ )
 END SUB
 
 
@@ -56,8 +56,7 @@ END SUB
 '
 SUB LDConnect()
   ' connect to the serial port as a file
-  OPEN "SER:4800,N,8,1" FOR INPUT AS 2
-  OPEN "SER:4800,N,8,1" FOR OUTPUT AS 2
+  OPEN "COM1:4800,N,8,1" AS 2
 END SUB
 
 
@@ -66,7 +65,7 @@ END SUB
 '
 SUB LDDisconnect()
   ' disconnect the serial port file
-  CLOSE 1,2
+  CLOSE 1
 END SUB
 
 
@@ -93,7 +92,7 @@ SUB LDSend( theCommand$ )
   IF ldEchoTx = 1 THEN
     PRINT "TX: ";theCommand$
   END IF 
-  PRINT #2, theCommand$;CHR$(13)
+  PRINT #1, theCommand$;CHR$(13)
 END SUB
 
 
